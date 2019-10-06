@@ -208,20 +208,18 @@ object frmMainForm: TfrmMainForm
   end
   object pgMainPageControl: TPageControl
     Left = 0
-    Top = 102
+    Top = 124
     Width = 684
-    Height = 320
-    ActivePage = tsLog
+    Height = 298
+    ActivePage = tsResults
     Align = alClient
     TabOrder = 2
-    ExplicitTop = 152
-    ExplicitHeight = 270
     object tsLog: TTabSheet
-      Caption = 'Journal'
-      ExplicitHeight = 354
+      Caption = '&Journal'
+      ExplicitHeight = 292
       object MasterGage: TGauge64
         Left = 0
-        Top = 275
+        Top = 253
         Width = 676
         Height = 17
         Align = alBottom
@@ -235,7 +233,7 @@ object frmMainForm: TfrmMainForm
         Left = 0
         Top = 0
         Width = 676
-        Height = 275
+        Height = 253
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -247,31 +245,30 @@ object frmMainForm: TfrmMainForm
         Zoom = 100
         TitleColor = clBlue
         SubTitleColor = clMaroon
-        ExplicitHeight = 337
+        ExplicitHeight = 275
       end
     end
     object tsResults: TTabSheet
-      Caption = 'R'#233'sultats'
+      Caption = '&R'#233'sultats'
       ImageIndex = 2
-      ExplicitHeight = 354
+      ExplicitHeight = 292
       object ResultPageControl: TPageControl
         Left = 0
         Top = 0
         Width = 676
-        Height = 292
+        Height = 270
         ActivePage = TabSheet16
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 354
         object TabSheet16: TTabSheet
-          Caption = 'Sommaire'
+          Caption = '&Sommaire'
           ImageIndex = 13
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memoSommaire: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -282,17 +279,17 @@ object frmMainForm: TfrmMainForm
             ReadOnly = True
             ScrollBars = ssVertical
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet3: TTabSheet
           Caption = '0/6'
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo06: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -301,18 +298,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet4: TTabSheet
           Caption = '0/6+'
           ImageIndex = 1
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo06p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -321,18 +318,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'R0/6'
+          ImageIndex = 15
+          object MemoR06: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet17: TTabSheet
+          Caption = 'R0/6+'
+          ImageIndex = 16
+          object MemoR06p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet5: TTabSheet
           Caption = '1/6'
           ImageIndex = 2
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo16: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -341,18 +376,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet6: TTabSheet
           Caption = '1/6+'
           ImageIndex = 3
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo16p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -361,18 +396,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet18: TTabSheet
+          Caption = 'R1/6'
+          ImageIndex = 17
+          object MemoR16: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet19: TTabSheet
+          Caption = 'R1/6+'
+          ImageIndex = 18
+          object MemoR16P: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet7: TTabSheet
           Caption = '2/6'
           ImageIndex = 4
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo26: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -381,18 +454,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet8: TTabSheet
           Caption = '2/6+'
           ImageIndex = 5
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo26p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -401,18 +474,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet20: TTabSheet
+          Caption = 'R2/6'
+          ImageIndex = 19
+          object MemoR26: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet21: TTabSheet
+          Caption = 'R2/6+'
+          ImageIndex = 20
+          object MemoR26p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet9: TTabSheet
           Caption = '3/6'
           ImageIndex = 6
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo36: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -421,18 +532,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet10: TTabSheet
           Caption = '3/6+'
           ImageIndex = 7
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo36p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -441,18 +552,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet22: TTabSheet
+          Caption = 'R3/6'
+          ImageIndex = 21
+          object MemoR36: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet23: TTabSheet
+          Caption = 'R3/6+'
+          ImageIndex = 22
+          object MemoR36p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet11: TTabSheet
           Caption = '4/6'
           ImageIndex = 8
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo46: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -461,18 +610,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet12: TTabSheet
           Caption = '4/6+'
           ImageIndex = 9
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo46p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -481,18 +630,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet24: TTabSheet
+          Caption = 'R4/6'
+          ImageIndex = 23
+          object MemoR46: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet25: TTabSheet
+          Caption = 'R4/6+'
+          ImageIndex = 24
+          object MemoR46p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet13: TTabSheet
           Caption = '5/6'
           ImageIndex = 10
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo56: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -501,18 +688,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet14: TTabSheet
           Caption = '5/6+'
           ImageIndex = 11
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo56p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -521,18 +708,56 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet26: TTabSheet
+          Caption = 'R5/6'
+          ImageIndex = 25
+          object MemoR56: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet27: TTabSheet
+          Caption = 'R5/6+'
+          ImageIndex = 26
+          object MemoR56p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
         object TabSheet15: TTabSheet
           Caption = '6/6'
           ImageIndex = 12
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo66: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -541,18 +766,18 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
           end
         end
         object TabSheet1: TTabSheet
           Caption = '6/6+'
           ImageIndex = 14
-          ExplicitHeight = 326
+          ExplicitHeight = 264
           object memo66p: TMemo
             Left = 0
             Top = 0
             Width = 668
-            Height = 264
+            Height = 242
             Align = alClient
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -561,7 +786,45 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 326
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet28: TTabSheet
+          Caption = 'R6/6'
+          ImageIndex = 27
+          object MemoR66: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
+          end
+        end
+        object TabSheet29: TTabSheet
+          Caption = 'R6/6+'
+          ImageIndex = 28
+          object MemoR66p: TMemo
+            Left = 0
+            Top = 0
+            Width = 668
+            Height = 242
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Fixedsys'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            ExplicitHeight = 264
           end
         end
       end
@@ -571,264 +834,67 @@ object frmMainForm: TfrmMainForm
     Left = 0
     Top = 40
     Width = 684
-    Height = 62
+    Height = 84
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
-    object Label1: TLabel
-      Left = 8
-      Top = 4
-      Width = 159
-      Height = 13
-      Caption = 'Nombre de num'#233'ro '#224' rechercher:'
-    end
-    object cbTypeOfSearch: TComboBox
-      Left = 173
-      Top = 0
-      Width = 169
+    DesignSize = (
+      684
+      84)
+    object edContain: TLabeledEdit
+      Left = 128
+      Top = 6
+      Width = 552
       Height = 21
-      Style = csDropDownList
-      DropDownCount = 16
-      ItemIndex = 6
+      Hint = 'Liste des num'#233'ros que doit contenir la combinaison'
+      Anchors = [akLeft, akTop, akRight]
+      EditLabel.Width = 45
+      EditLabel.Height = 13
+      EditLabel.Hint = 'Liste des num'#233'ros que doit contenir la combinaison'
+      EditLabel.Caption = '&Contient:'
+      LabelPosition = lpLeft
       TabOrder = 0
-      Text = 'Recherche de 6 num'#233'ros'
-      OnChange = cbTypeOfSearchChange
-      Items.Strings = (
-        'Recherche de 0 num'#233'ro'
-        'Recherche de 1 num'#233'ro'
-        'Recherche de 2 num'#233'ros'
-        'Recherche de 3 num'#233'ros'
-        'Recherche de 4 num'#233'ros'
-        'Recherche de 5 num'#233'ros'
-        'Recherche de 6 num'#233'ros'
-        'Recherche de 7 num'#233'ros'
-        'Recherche de 8 num'#233'ros'
-        'Recherche de 9 num'#233'ros'
-        'Recherche de 10 num'#233'ros')
     end
-    object chkComplementaire: TCheckBox
-      Left = 463
-      Top = 2
-      Width = 202
-      Height = 17
-      Caption = 'Je veux sp'#233'cifier un compl'#233'mentaire'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
+    object edMustNotContain: TLabeledEdit
+      Left = 128
+      Top = 30
+      Width = 552
+      Height = 21
+      Hint = 'Liste des num'#233'ros que ne doit pas doit contenir la combinaison'
+      Anchors = [akLeft, akTop, akRight]
+      EditLabel.Width = 100
+      EditLabel.Height = 13
+      EditLabel.Hint = 'Liste des num'#233'ros que ne doit pas doit contenir la combinaison'
+      EditLabel.Caption = 'Ne doit &pas contenir:'
+      LabelPosition = lpLeft
       TabOrder = 1
-      OnClick = chkComplementaireClick
     end
-    object cbSearchNumber1: TComboBox
-      Left = 12
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
+    object edWantedComplementaire: TLabeledEdit
+      Left = 128
+      Top = 54
+      Width = 177
+      Height = 21
+      Hint = 'Num'#233'ro compl'#233'mentaire voulu'
+      EditLabel.Width = 81
+      EditLabel.Height = 13
+      EditLabel.Hint = 'Num'#233'ro compl'#233'mentaire voulu'
+      EditLabel.Caption = 'Compl'#233'men&taire:'
+      LabelPosition = lpLeft
       TabOrder = 2
-      Text = '49'
-      Items.Strings = (
-        '49')
     end
-    object cbSearchNumber2: TComboBox
-      Left = 72
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
+    object edNotWantedComplementaire: TLabeledEdit
+      Left = 456
+      Top = 54
+      Width = 224
+      Height = 21
+      Hint = 'Liste des num'#233'ros qui doivent pas '#234'tre le num'#233'ro compl'#233'mentaire'
+      Anchors = [akLeft, akTop, akRight]
+      EditLabel.Width = 132
+      EditLabel.Height = 13
+      EditLabel.Hint = 'Liste des num'#233'ros qui doivent pas '#234'tre le num'#233'ro compl'#233'mentaire'
+      EditLabel.Caption = 'Compl'#233'mentaire non-&voulu:'
+      LabelPosition = lpLeft
       TabOrder = 3
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber3: TComboBox
-      Left = 132
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 4
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber4: TComboBox
-      Left = 192
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 5
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber5: TComboBox
-      Left = 252
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 6
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber6: TComboBox
-      Left = 312
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 7
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber7: TComboBox
-      Left = 372
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 8
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber8: TComboBox
-      Left = 432
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 9
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber9: TComboBox
-      Left = 492
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 10
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbSearchNumber10: TComboBox
-      Left = 552
-      Top = 25
-      Width = 53
-      Height = 33
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -21
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 11
-      Text = '49'
-      Items.Strings = (
-        '49')
-    end
-    object cbComplementaire: TComboBox
-      Left = 620
-      Top = 25
-      Width = 45
-      Height = 28
-      Style = csDropDownList
-      DropDownCount = 16
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -16
-      Font.Name = 'Arial Narrow'
-      Font.Style = [fsBold]
-      ItemIndex = 0
-      ParentFont = False
-      TabOrder = 12
-      Text = '49'
-      Items.Strings = (
-        '49')
     end
   end
   object alMainActionList: TActionList
@@ -843,12 +909,14 @@ object frmMainForm: TfrmMainForm
       Caption = 'Cherche cette combinaison'
       Hint = 'Cherche cette combinaison'
       ImageIndex = 1
+      ShortCut = 120
       OnExecute = actChercheCetteCombinaisonExecute
     end
     object actValideLeFichierDesNumeros: TAction
       Caption = 'Valide le fichier des num'#233'ros'
       Hint = 'Valide le fichier des num'#233'ros'
       ImageIndex = 0
+      ShortCut = 16499
       OnExecute = actValideLeFichierDesNumerosExecute
     end
     object actExit: TAction
@@ -860,12 +928,14 @@ object frmMainForm: TfrmMainForm
     object actEdit: TAction
       Caption = #201'dite le fichier des num'#233'ros'
       ImageIndex = 3
+      ShortCut = 115
       OnExecute = actEditExecute
     end
     object actMiseEclair: TAction
       Caption = 'Mise-'#233'clair'
       Hint = 'Mise-'#201'clair'
       ImageIndex = 4
+      ShortCut = 118
       OnExecute = actMiseEclairExecute
     end
   end
@@ -895,7 +965,7 @@ object frmMainForm: TfrmMainForm
     Left = 472
     Top = 344
     Bitmap = {
-      494C010105000800800020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000800840020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000800000004000000001002000000000000080
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1966,8 +2036,14 @@ object frmMainForm: TfrmMainForm
   object pmMain: TPopupMenu
     Left = 144
     Top = 352
+    object ditelefichierdesnumros1: TMenuItem
+      Action = actEdit
+    end
     object Validelefichierdesnumros2: TMenuItem
       Action = actValideLeFichierDesNumeros
+    end
+    object Miseclair1: TMenuItem
+      Action = actMiseEclair
     end
     object Cherchecettecombinaison2: TMenuItem
       Action = actChercheCetteCombinaison
@@ -1977,6 +2053,110 @@ object frmMainForm: TfrmMainForm
     end
     object Sortie2: TMenuItem
       Action = actExit
+    end
+  end
+  object pmMiseEclair: TPopupMenu
+    Left = 352
+    Top = 220
+    object Rechercheavec1numro1: TMenuItem
+      Tag = 1
+      Caption = 'Recherche avec 1 num'#233'ro'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec2numros1: TMenuItem
+      Tag = 2
+      Caption = 'Recherche avec 2 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec3numros1: TMenuItem
+      Tag = 3
+      Caption = 'Recherche avec 3 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec4numros1: TMenuItem
+      Tag = 4
+      Caption = 'Recherche avec 4 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec5numros1: TMenuItem
+      Tag = 5
+      Caption = 'Recherche avec 5 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec6numros1: TMenuItem
+      Tag = 6
+      Caption = 'Recherche avec 6 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec7numros1: TMenuItem
+      Tag = 7
+      Caption = 'Recherche avec 7 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec8numros1: TMenuItem
+      Tag = 8
+      Caption = 'Recherche avec 8 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec9numros1: TMenuItem
+      Tag = 9
+      Caption = 'Recherche avec 9 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec10numros1: TMenuItem
+      Tag = 10
+      Caption = 'Recherche avec 10 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec11numros1: TMenuItem
+      Tag = 11
+      Caption = 'Recherche avec 11 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec12numros1: TMenuItem
+      Tag = 12
+      Caption = 'Recherche avec 12 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec13numros1: TMenuItem
+      Tag = 13
+      Caption = 'Recherche avec 13 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec14numros1: TMenuItem
+      Tag = 14
+      Caption = 'Recherche avec 14 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec15numros1: TMenuItem
+      Tag = 15
+      Caption = 'Recherche avec 15 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec16numros1: TMenuItem
+      Tag = 16
+      Caption = 'Recherche avec 16 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec17numros1: TMenuItem
+      Tag = 17
+      Caption = 'Recherche avec 17 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec18numros1: TMenuItem
+      Tag = 18
+      Caption = 'Recherche avec 18 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec19numros1: TMenuItem
+      Tag = 19
+      Caption = 'Recherche avec 19 num'#233'ros'
+      OnClick = MiseEclairClick
+    end
+    object Rechercheavec20numros1: TMenuItem
+      Tag = 20
+      Caption = 'Recherche avec 20 num'#233'ros'
+      OnClick = MiseEclairClick
     end
   end
 end

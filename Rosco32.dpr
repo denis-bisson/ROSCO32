@@ -2,9 +2,7 @@ program Rosco32;
 
 uses
   Vcl.Forms,
-  fRosco32 in 'fRosco32.pas' {frmMainForm},
-  MyGlobal6Color in '..\..\CompDX\10-BluberiComp\KwashVCL\MyGlobal6Color.pas',
-  uCommonStuff in '..\Callidus\Common\uCommonStuff.pas';
+  fRosco32 in 'fRosco32.pas' {frmMainForm};
 
 {$R *.res}
 
