@@ -216,7 +216,6 @@ object frmMainForm: TfrmMainForm
     TabOrder = 2
     object tsLog: TTabSheet
       Caption = '&Journal'
-      ExplicitHeight = 292
       object MasterGage: TGauge64
         Left = 0
         Top = 253
@@ -245,13 +244,11 @@ object frmMainForm: TfrmMainForm
         Zoom = 100
         TitleColor = clBlue
         SubTitleColor = clMaroon
-        ExplicitHeight = 275
       end
     end
     object tsResults: TTabSheet
       Caption = '&R'#233'sultats'
       ImageIndex = 2
-      ExplicitHeight = 292
       object ResultPageControl: TPageControl
         Left = 0
         Top = 0
@@ -263,7 +260,6 @@ object frmMainForm: TfrmMainForm
         object TabSheet16: TTabSheet
           Caption = '&Sommaire'
           ImageIndex = 13
-          ExplicitHeight = 264
           object memoSommaire: TMemo
             Left = 0
             Top = 0
@@ -279,12 +275,10 @@ object frmMainForm: TfrmMainForm
             ReadOnly = True
             ScrollBars = ssVertical
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet3: TTabSheet
           Caption = '0/6'
-          ExplicitHeight = 264
           object memo06: TMemo
             Left = 0
             Top = 0
@@ -298,13 +292,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet4: TTabSheet
           Caption = '0/6+'
           ImageIndex = 1
-          ExplicitHeight = 264
           object memo06p: TMemo
             Left = 0
             Top = 0
@@ -318,7 +310,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet2: TTabSheet
@@ -337,7 +328,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet17: TTabSheet
@@ -356,13 +346,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet5: TTabSheet
           Caption = '1/6'
           ImageIndex = 2
-          ExplicitHeight = 264
           object memo16: TMemo
             Left = 0
             Top = 0
@@ -376,13 +364,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet6: TTabSheet
           Caption = '1/6+'
           ImageIndex = 3
-          ExplicitHeight = 264
           object memo16p: TMemo
             Left = 0
             Top = 0
@@ -396,7 +382,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet18: TTabSheet
@@ -415,7 +400,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet19: TTabSheet
@@ -434,13 +418,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet7: TTabSheet
           Caption = '2/6'
           ImageIndex = 4
-          ExplicitHeight = 264
           object memo26: TMemo
             Left = 0
             Top = 0
@@ -454,13 +436,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet8: TTabSheet
           Caption = '2/6+'
           ImageIndex = 5
-          ExplicitHeight = 264
           object memo26p: TMemo
             Left = 0
             Top = 0
@@ -474,7 +454,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet20: TTabSheet
@@ -493,7 +472,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet21: TTabSheet
@@ -512,13 +490,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet9: TTabSheet
           Caption = '3/6'
           ImageIndex = 6
-          ExplicitHeight = 264
           object memo36: TMemo
             Left = 0
             Top = 0
@@ -532,13 +508,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet10: TTabSheet
           Caption = '3/6+'
           ImageIndex = 7
-          ExplicitHeight = 264
           object memo36p: TMemo
             Left = 0
             Top = 0
@@ -552,7 +526,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet22: TTabSheet
@@ -571,7 +544,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet23: TTabSheet
@@ -590,13 +562,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet11: TTabSheet
           Caption = '4/6'
           ImageIndex = 8
-          ExplicitHeight = 264
           object memo46: TMemo
             Left = 0
             Top = 0
@@ -610,13 +580,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet12: TTabSheet
           Caption = '4/6+'
           ImageIndex = 9
-          ExplicitHeight = 264
           object memo46p: TMemo
             Left = 0
             Top = 0
@@ -630,7 +598,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet24: TTabSheet
@@ -649,7 +616,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet25: TTabSheet
@@ -668,13 +634,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet13: TTabSheet
           Caption = '5/6'
           ImageIndex = 10
-          ExplicitHeight = 264
           object memo56: TMemo
             Left = 0
             Top = 0
@@ -688,13 +652,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet14: TTabSheet
           Caption = '5/6+'
           ImageIndex = 11
-          ExplicitHeight = 264
           object memo56p: TMemo
             Left = 0
             Top = 0
@@ -708,7 +670,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet26: TTabSheet
@@ -727,7 +688,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet27: TTabSheet
@@ -746,13 +706,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet15: TTabSheet
           Caption = '6/6'
           ImageIndex = 12
-          ExplicitHeight = 264
           object memo66: TMemo
             Left = 0
             Top = 0
@@ -766,13 +724,11 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet1: TTabSheet
           Caption = '6/6+'
           ImageIndex = 14
-          ExplicitHeight = 264
           object memo66p: TMemo
             Left = 0
             Top = 0
@@ -786,7 +742,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet28: TTabSheet
@@ -805,7 +760,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
         object TabSheet29: TTabSheet
@@ -824,7 +778,6 @@ object frmMainForm: TfrmMainForm
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            ExplicitHeight = 264
           end
         end
       end
@@ -965,7 +918,7 @@ object frmMainForm: TfrmMainForm
     Left = 472
     Top = 344
     Bitmap = {
-      494C010105000800840020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000800880020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000800000004000000001002000000000000080
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

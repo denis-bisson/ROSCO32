@@ -535,7 +535,6 @@ begin
     end;
     inc(iIndex);
   end;
-
 end;
 
 procedure TfrmMainForm.MiseEclairClick(Sender: TObject);
@@ -549,7 +548,6 @@ begin
   try
     slWantedNumbers.Clear;
     edContain.Text := '';
-    edWantedComplementaire.Text;
     WantedFinalSheet := tsResults;
     ResultPageControl.ActivePageIndex := 0;
     if SanitizeAllExpressions then
