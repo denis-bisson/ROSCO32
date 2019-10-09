@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.AppEvnts, System.ImageList,
   Vcl.ImgList, Vcl.ComCtrls, Vcl.ToolWin, Vcl.Menus, System.Actions,
-  Vcl.ActnList, Vcl.StdCtrls, uEnhancedRichEdit, uGauge64, Vcl.ExtCtrls;
+  Vcl.ActnList, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Samples.Gauges;
 
 const
   MAXSEARCHNUMBER = 10;
@@ -24,10 +24,9 @@ type
     sbMainStatusBar: TStatusBar;
     ilMainImageList: TImageList;
     aeMainApplicationEvent: TApplicationEvents;
-    actLoadDatabase: TAction;
     pgMainPageControl: TPageControl;
     tsLog: TTabSheet;
-    StatusWindow: TRichEditGlobal6;
+    StatusWindow: TRichEdit;
     actChercheCetteCombinaison: TAction;
     actValideLeFichierDesNumeros: TAction;
     ToolButton1: TToolButton;
@@ -35,7 +34,7 @@ type
     Action1: TMenuItem;
     Validelefichierdesnumros1: TMenuItem;
     Cherchecettecombinaison1: TMenuItem;
-    MasterGage: TGauge64;
+    MasterGage: TGauge;
     tsResults: TTabSheet;
     ResultPageControl: TPageControl;
     TabSheet3: TTabSheet;
@@ -138,17 +137,17 @@ type
     Rechercheavec20numros1: TMenuItem;
     ditelefichierdesnumros1: TMenuItem;
     Miseclair1: TMenuItem;
-    procedure actLoadDatabaseExecute(Sender: TObject);
-    procedure actValideLeFichierDesNumerosExecute(Sender: TObject);
+    ditelefichierdesnumros2: TMenuItem;
+    Miseclair2: TMenuItem;
     procedure FormCreate(Sender: TObject);
-    procedure actChercheCetteCombinaisonExecute(Sender: TObject);
-    procedure aeMainApplicationEventIdle(Sender: TObject; var Done: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure actExitExecute(Sender: TObject);
-    procedure actEditExecute(Sender: TObject);
-    procedure chkComplementaireClick(Sender: TObject);
-    procedure actMiseEclairExecute(Sender: TObject);
+    procedure aeMainApplicationEventIdle(Sender: TObject; var Done: Boolean);
     procedure MiseEclairClick(Sender: TObject);
+    procedure actEditExecute(Sender: TObject);
+    procedure actValideLeFichierDesNumerosExecute(Sender: TObject);
+    procedure actMiseEclairExecute(Sender: TObject);
+    procedure actChercheCetteCombinaisonExecute(Sender: TObject);
+    procedure actExitExecute(Sender: TObject);
   private
     { Private declarations }
     bFinalActionResult: boolean;
@@ -160,8 +159,7 @@ type
     bFirstIdle: boolean;
     lbDominicBoule: TStringList;
     slWantedNumbers, slNonWantedNumbers, slComplemantaireWanted, slComplementaireNonWanted: TStringList;
-    procedure DisableToute;
-    procedure EnableToute;
+    procedure WriteStatus(const sMessageToShow: string; const iColorToUse: dword);
     function LoadDatabaseInMemory: boolean;
     function IntegreCesNumeros(sLineNumber: string; var sErrorString: string): boolean;
     function ValidateSearchedNumberAreCorrect: boolean;
@@ -169,10 +167,12 @@ type
     function DoSearchingJob: boolean;
     function ShowResult: boolean;
     function GetALineForThisCombinaison(paramTirage: integer; bGotComplementaire: boolean): string;
-    procedure LoadConfiguration;
-    procedure SaveConfiguration;
     function SanitizeExpression(edExpression: TLabeledEdit; slNumbers: TStringList): boolean;
     function SanitizeAllExpressions: boolean;
+    procedure DisableToute;
+    procedure EnableToute;
+    procedure LoadConfiguration;
+    procedure SaveConfiguration;
   public
     { Public declarations }
   end;
@@ -186,129 +186,21 @@ implementation
 
 uses
   //Delphi
-  Registry, ShellAPI, System.UITypes,
-
-  //Own
-  uG6Color;
+  Registry, ShellAPI, System.UITypes;
 
 const
   BASELOCATIONOFREGISTRYINI = 'SOFTWARE\DENISBISSON\ROSCO32';
   MAINCONFIGSECTION = 'MainSection';
 
-procedure TfrmMainForm.actEditExecute(Sender: TObject);
-var
-  sNomFichierIn: string;
-begin
-  sNomFichierIn := paramstr(0);
-  sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
-  StatusWindow.WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
-  if FileExists(sNomFichierIn) then
-  begin
-    ShellExecute(Application.Handle, 'open', PChar(sNomFichierIn), nil, PChar(ExtractFilePath(sNomFichierIn)), SW_SHOWNORMAL); // SW_NORMAL
-  end
-  else
-  begin
-    MessageDlg('ERREUR: Je ne trouve pas le fichier des numéro...' + #$0A + #$0A + 'Normalement: ' + sNomFichierIn, mtError, [mbOk], 0);
-  end;
-end;
+  COLORDANGER = clOlive;
+  COLORSUCCESS = clGreen;
+  COLORERROR = clRed;
+  COLORSTATUS = clBlack;
+  COLORWINDOW_WORKING = $D0FFFF;
+  COLORWINDOW_SUCCESS = $E0FFE0;
+  COLORWINDOW_ERROR = $E0E0FF;
 
-procedure TfrmMainForm.actExitExecute(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TfrmMainForm.actLoadDatabaseExecute(Sender: TObject);
-begin
-  DisableToute;
-  try
-    bFinalActionResult := LoadDatabaseInMemory;
-  finally
-    EnableToute;
-  end;
-end;
-
-procedure TfrmMainForm.actMiseEclairExecute(Sender: TObject);
-var
-  pPopupLocation: TPoint;
-begin
-  GetCursorPos(pPopupLocation);
-  pmMiseEclair.Popup(pPopupLocation.X, pPopupLocation.Y);
-end;
-
-procedure TfrmMainForm.actValideLeFichierDesNumerosExecute(Sender: TObject);
-begin
-  DisableToute;
-  try
-    bFinalActionResult := LoadDatabaseInMemory;
-  finally
-    EnableToute;
-  end;
-end;
-
-procedure TfrmMainForm.aeMainApplicationEventIdle(Sender: TObject;
-  var Done: Boolean);
-begin
-  if bFirstIdle then
-  begin
-    bFirstIdle := FALSE;
-    LoadConfiguration;
-  end;
-end;
-
-procedure TfrmMainForm.DisableToute;
-var
-  iAction, iRejet, iComplementaire, iResult: integer;
-begin
-  for iAction := 0 to pred(alMainActionList.ActionCount) do
-    alMainActionList.Actions[iAction].Enabled := FALSE;
-  bFinalActionResult := FALSE;
-  WantedFinalSheet := nil;
-  StatusWindow.Clear;
-  StatusWindow.Color := COLORWINDOW_WORKING;
-  pgMainPageControl.ActivePage := tsLog;
-  for iRejet := 0 to 1 do
-    for iComplementaire := 0 to 1 do
-      for iResult := 0 to pred(MAXSEARCHNUMBER) do
-        WinningResult[iRejet][iComplementaire][iResult] := 0;
-
-  for iRejet := 0 to 1 do
-    for iComplementaire := 0 to 1 do
-      for iResult := 0 to 6 do
-      begin
-        pMemo[iRejet][iComplementaire][iResult]^.Clear;
-        pMemo[iRejet][iComplementaire][iResult]^.ScrollBars := ssVertical;
-        pMemo[iRejet][iComplementaire][iResult]^.ReadOnly := True;
-      end;
-  memoSommaire.Clear;
-end;
-
-procedure TfrmMainForm.EnableToute;
-var
-  iAction: integer;
-begin
-  for iAction := 0 to pred(alMainActionList.ActionCount) do
-    alMainActionList.Actions[iAction].Enabled := TRUE;
-
-  if bFinalActionResult then
-  begin
-    StatusWindow.WriteStatus('L''opération a été un succès!', COLORSUCCESS);
-    StatusWindow.Color := COLORWINDOW_SUCCESS;
-    if WantedFinalSheet <> nil then
-      pgMainPageControl.ActivePage := WantedFinalSheet;
-  end
-  else
-  begin
-    StatusWindow.WriteStatus('L''opération a échouée...', COLORERROR);
-    StatusWindow.Color := COLORWINDOW_ERROR;
-
-  end;
-end;
-
-procedure TfrmMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  SaveConfiguration;
-end;
-
+{ TfrmMainForm.FormCreate }
 procedure TfrmMainForm.FormCreate(Sender: TObject);
 begin
   lbDominicBoule := TStringList.Create;
@@ -344,7 +236,7 @@ begin
   slComplementaireNonWanted.Delimiter := ',';
 
   bFirstIdle := True;
-  Caption := 'ROSCO32 v2.1';
+  Caption := 'ROSCO32 v2.2';
   pMemo[0][0][0] := addr(memo06);
   pMemo[0][1][0] := addr(memo06p);
   pMemo[0][0][1] := addr(memo16);
@@ -376,13 +268,219 @@ begin
   pMemo[1][1][6] := addr(memoR66p);
 end;
 
-procedure TfrmMainForm.chkComplementaireClick(Sender: TObject);
+{ TfrmMainForm.FormClose }
+procedure TfrmMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  SaveConfiguration;
 end;
 
+{ TfrmMainForm.aeMainApplicationEventIdle }
+procedure TfrmMainForm.aeMainApplicationEventIdle(Sender: TObject; var Done: Boolean);
+begin
+  if bFirstIdle then
+  begin
+    bFirstIdle := FALSE;
+    LoadConfiguration;
+  end;
+end;
+
+{ TfrmMainForm.MiseEclairClick }
+procedure TfrmMainForm.MiseEclairClick(Sender: TObject);
+var
+  iWantedNumberOfNumbers, iIndex: integer;
+  sRemainingNumbers: TStringList;
+begin
+  iWantedNumberOfNumbers := TComponent(Sender).Tag;
+
+  DisableToute;
+  try
+    slWantedNumbers.Clear;
+    edContain.Text := '';
+    WantedFinalSheet := tsResults;
+    ResultPageControl.ActivePageIndex := 0;
+    if SanitizeAllExpressions then
+      if ValidateSearchedNumberAreCorrect then
+      begin
+        sRemainingNumbers := TStringList.Create;
+        try
+          sRemainingNumbers.Sorted := True;
+          sRemainingNumbers.Duplicates := dupIgnore;
+          for iIndex := 1 to 49 do
+            if (self.slNonWantedNumbers.IndexOf(IntToStr(iIndex)) = -1) and (self.slComplemantaireWanted.IndexOf(IntToStr(iIndex)) = -1) then
+              sRemainingNumbers.Add(IntToStr(iIndex));
+
+          if sRemainingNumbers.Count >= iWantedNumberOfNumbers then
+          begin
+            randomize;
+            while slWantedNumbers.Count < iWantedNumberOfNumbers do
+            begin
+              iIndex := random(sRemainingNumbers.Count);
+              slWantedNumbers.Add(sRemainingNumbers.Strings[iIndex]);
+              sRemainingNumbers.Delete(iIndex);
+            end;
+
+            edContain.Text := slWantedNumbers.CommaText;
+
+            if LoadDatabaseInMemory then
+              if DoSearchingJob then
+                bFinalActionResult := ShowResult;
+          end
+          else
+          begin
+            WriteStatus('ERREUR: Avec vos critères, il ne me reste pas assez de numéros disponibles pour pondre une combinaison-éclair répondant à' +
+              ' vos critères et votre demande!', COLORERROR);
+          end;
+        finally
+          sRemainingNumbers.Free;
+        end;
+      end;
+  finally
+    EnableToute;
+  end;
+end;
+
+{ TfrmMainForm.actEditExecute }
+procedure TfrmMainForm.actEditExecute(Sender: TObject);
+var
+  sNomFichierIn: string;
+begin
+  sNomFichierIn := paramstr(0);
+  sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
+  WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
+  if FileExists(sNomFichierIn) then
+  begin
+    ShellExecute(Application.Handle, 'open', PChar(sNomFichierIn), nil, PChar(ExtractFilePath(sNomFichierIn)), SW_SHOWNORMAL); // SW_NORMAL
+  end
+  else
+  begin
+    MessageDlg('ERREUR: Je ne trouve pas le fichier des numéro...' + #$0A + #$0A + 'Normalement: ' + sNomFichierIn, mtError, [mbOk], 0);
+  end;
+end;
+
+{ TfrmMainForm.actValideLeFichierDesNumerosExecute }
+procedure TfrmMainForm.actValideLeFichierDesNumerosExecute(Sender: TObject);
+begin
+  DisableToute;
+  try
+    bFinalActionResult := LoadDatabaseInMemory;
+  finally
+    EnableToute;
+  end;
+end;
+
+{ TfrmMainForm.actMiseEclairExecute }
+procedure TfrmMainForm.actMiseEclairExecute(Sender: TObject);
+var
+  pPopupLocation: TPoint;
+begin
+  GetCursorPos(pPopupLocation);
+  pmMiseEclair.Popup(pPopupLocation.X, pPopupLocation.Y);
+end;
+
+{ TfrmMainForm.actChercheCetteCombinaisonExecute }
+procedure TfrmMainForm.actChercheCetteCombinaisonExecute(Sender: TObject);
+begin
+  DisableToute;
+  try
+    WantedFinalSheet := tsResults;
+    ResultPageControl.ActivePageIndex := 0;
+    if SanitizeAllExpressions then
+      if ValidateSearchedNumberAreCorrect then
+        if LoadDatabaseInMemory then
+          if DoSearchingJob then
+            bFinalActionResult := ShowResult;
+  finally
+    EnableToute;
+  end;
+end;
+
+{ TfrmMainForm.actExitExecute }
+procedure TfrmMainForm.actExitExecute(Sender: TObject);
+begin
+  Close;
+end;
+
+{ TfrmMainForm.WriteStatus }
+procedure TfrmMainForm.WriteStatus(const sMessageToShow: string; const iColorToUse: dword);
+var
+  iHour, iMinute, iSec, iMilliSec: word;
+begin
+  DecodeTime(now, iHour, iMinute, iSec, iMilliSec);
+  StatusWindow.SelAttributes.Color := iColorToUse;
+  StatusWindow.Lines.Add(Format('%2.2d:%2.2d:%2.2d:%3.3d:%s', [iHour, iMinute, iSec, iMilliSec, sMessageToShow]));
+  Application.ProcessMessages;
+end;
+
+{ TfrmMainForm.LoadDatabaseInMemory }
+function TfrmMainForm.LoadDatabaseInMemory: boolean;
+var
+  slLocalList: TStringList;
+  iLineNumber, NbError: integer;
+  sNomFichierIn, sWorkingLine, sErrorString: string;
+begin
+  result := FALSE;
+  iNombreDeTirage := 0;
+  slLocalList := TStringList.Create;
+  try
+    sNomFichierIn := paramstr(0);
+    sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
+    WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
+    if FileExists(sNomFichierIn) then
+    begin
+      WriteStatus('Le fichier a été trouvé!', COLORSUCCESS);
+
+      WriteStatus('On charge en mémoire le fichier des numéros...', COLORDANGER);
+      slLocalList.LoadFromFile(sNomFichierIn);
+      WriteStatus('Le fichier a été chargé!', COLORSUCCESS);
+
+      WriteStatus('On valide l''intégrité du fichier...', COLORDANGER);
+      NbError := 0;
+      for iLineNumber := 0 to pred(slLocalList.Count) do
+      begin
+        sWorkingLine := StringReplace(slLocalList.Strings[iLineNumber], ' ', '', [rfReplaceAll, rfIgnoreCase]);
+        if length(sWorkingLine) > 0 then
+        begin
+          if length(sWorkingLine) = 23 then
+          begin
+            if IntegreCesNumeros(sWorkingLine, sErrorString) then
+            begin
+            end
+            else
+            begin
+              WriteStatus('Erreur avec la ligne #' + IntToStr(iLineNumber + 1) + ': ' + slLocalList.Strings[iLineNumber], COLORERROR);
+              WriteStatus(sErrorString, COLORERROR);
+              WriteStatus('', COLORSTATUS);
+              inc(NbError);
+            end;
+          end
+          else
+          begin
+            WriteStatus('Erreur avec la ligne #' + IntToStr(iLineNumber + 1) + ': ' + slLocalList.Strings[iLineNumber], COLORERROR);
+            WriteStatus('', COLORSTATUS);
+            inc(NbError);
+          end;
+        end;
+      end;
+
+      if NbError = 0 then
+      begin
+        WriteStatus('Nombre total de tirage importés: ' + IntToStr(iNombreDeTirage), COLORSUCCESS);
+        result := True;
+      end;
+    end
+    else
+    begin
+      WriteStatus('ERREUR: On ne trouve pas le fichier des numéros!', COLORERROR);
+      WriteStatus('', COLORSTATUS);
+    end;
+  finally
+    FreeAndNil(slLocalList);
+  end;
+end;
+
+{ TfrmMainForm.IntegreCesNumeros }
 //12345678901
 //Oct04199704214142464839
-
 function TfrmMainForm.IntegreCesNumeros(sLineNumber: string; var sErrorString: string): boolean;
 var
   LocalNumber: array[0..6] of integer;
@@ -438,172 +536,20 @@ begin
   end;
 end;
 
-function TfrmMainForm.LoadDatabaseInMemory: boolean;
-var
-  slLocalList: TStringList;
-  iLineNumber, NbError: integer;
-  sNomFichierIn, sWorkingLine, sErrorString: string;
-begin
-  result := FALSE;
-  iNombreDeTirage := 0;
-  slLocalList := TStringList.Create;
-  try
-    sNomFichierIn := paramstr(0);
-    sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
-    StatusWindow.WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
-    if FileExists(sNomFichierIn) then
-    begin
-      StatusWindow.WriteStatus('Le fichier a été trouvé!', COLORSUCCESS);
-
-      StatusWindow.WriteStatus('On charge en mémoire le fichier des numéros...', COLORDANGER);
-      slLocalList.LoadFromFile(sNomFichierIn);
-      StatusWindow.WriteStatus('Le fichier a été chargé!', COLORSUCCESS);
-
-      StatusWindow.WriteStatus('On valide l''intégrité du fichier...', COLORDANGER);
-      NbError := 0;
-      for iLineNumber := 0 to pred(slLocalList.Count) do
-      begin
-        sWorkingLine := StringReplace(slLocalList.Strings[iLineNumber], ' ', '', [rfReplaceAll, rfIgnoreCase]);
-        if length(sWorkingLine) > 0 then
-        begin
-          if length(sWorkingLine) = 23 then
-          begin
-            if IntegreCesNumeros(sWorkingLine, sErrorString) then
-            begin
-            end
-            else
-            begin
-              StatusWindow.WriteStatus('Erreur avec la ligne #' + IntToStr(iLineNumber + 1) + ': ' + slLocalList.Strings[iLineNumber], COLORERROR);
-              StatusWindow.WriteStatus(sErrorString, COLORERROR);
-              StatusWindow.JumpOneLine;
-              inc(NbError);
-            end;
-          end
-          else
-          begin
-            StatusWindow.WriteStatus('Erreur avec la ligne #' + IntToStr(iLineNumber + 1) + ': ' + slLocalList.Strings[iLineNumber], COLORERROR);
-            StatusWindow.JumpOneLine;
-            inc(NbError);
-          end;
-        end;
-      end;
-
-      if NbError = 0 then
-      begin
-        StatusWindow.WriteStatus('Nombre total de tirage importés: ' + IntToStr(iNombreDeTirage), COLORSUCCESS);
-        result := True;
-      end;
-    end
-    else
-    begin
-      StatusWindow.WriteStatus('ERREUR: On ne trouve pas le fichier des numéros!', COLORERROR);
-      StatusWindow.JumpOneLine;
-    end;
-  finally
-    FreeAndNil(slLocalList);
-  end;
-end;
-
-procedure TfrmMainForm.actChercheCetteCombinaisonExecute(Sender: TObject);
-begin
-  DisableToute;
-  try
-    WantedFinalSheet := tsResults;
-    ResultPageControl.ActivePageIndex := 0;
-    if SanitizeAllExpressions then
-      if ValidateSearchedNumberAreCorrect then
-        if LoadDatabaseInMemory then
-          if DoSearchingJob then
-            bFinalActionResult := ShowResult;
-  finally
-    EnableToute;
-  end;
-end;
-
-function TfrmMainForm.MakeSureNothingInCommon(slNumbers1, slNumbers2: TStringList): boolean;
-var
-  iIndex: integer;
-begin
-  result := True;
-  iIndex := 0;
-  while (iIndex < slNumbers1.Count) and (result) do
-  begin
-    if slNumbers2.IndexOf(slNumbers1.Strings[iIndex]) <> -1 then
-    begin
-      StatusWindow.WriteStatus(Format('ERREUR: Le numéro suivant est contenu dans deux liste: %s', [slNumbers1.Strings[iIndex]]), COLORERROR);
-      result := False;
-    end;
-    inc(iIndex);
-  end;
-end;
-
-procedure TfrmMainForm.MiseEclairClick(Sender: TObject);
-var
-  iWantedNumberOfNumbers, iIndex: integer;
-  sRemainingNumbers: TStringList;
-begin
-  iWantedNumberOfNumbers := TComponent(Sender).Tag;
-
-  DisableToute;
-  try
-    slWantedNumbers.Clear;
-    edContain.Text := '';
-    WantedFinalSheet := tsResults;
-    ResultPageControl.ActivePageIndex := 0;
-    if SanitizeAllExpressions then
-      if ValidateSearchedNumberAreCorrect then
-      begin
-        sRemainingNumbers := TStringList.Create;
-        try
-          sRemainingNumbers.Sorted := True;
-          sRemainingNumbers.Duplicates := dupIgnore;
-          for iIndex := 1 to 49 do
-            if (self.slNonWantedNumbers.IndexOf(IntToStr(iIndex)) = -1) and (self.slComplemantaireWanted.IndexOf(IntToStr(iIndex)) = -1) then
-              sRemainingNumbers.Add(IntToStr(iIndex));
-
-          if sRemainingNumbers.Count >= iWantedNumberOfNumbers then
-          begin
-            randomize;
-            while slWantedNumbers.Count < iWantedNumberOfNumbers do
-            begin
-              iIndex := random(sRemainingNumbers.Count);
-              slWantedNumbers.Add(sRemainingNumbers.Strings[iIndex]);
-              sRemainingNumbers.Delete(iIndex);
-            end;
-
-            edContain.Text := slWantedNumbers.CommaText;
-
-            if LoadDatabaseInMemory then
-              if DoSearchingJob then
-                bFinalActionResult := ShowResult;
-          end
-          else
-          begin
-            StatusWindow.WriteStatus('ERREUR: Avec vos critères, il ne me reste pas assez de numéros disponibles pour pondre une combinaison-éclair répondant à' +
-              ' vos critères et votre demande!', COLORERROR);
-          end;
-        finally
-          sRemainingNumbers.Free;
-        end;
-      end;
-  finally
-    EnableToute;
-  end;
-end;
-
+{ TfrmMainForm.ValidateSearchedNumberAreCorrect }
 function TfrmMainForm.ValidateSearchedNumberAreCorrect: boolean;
 begin
   result := False;
 
-  StatusWindow.WriteStatus('Doit contenir: ', COLORSTATUS);
-  StatusWindow.WriteStatus('    ' + slWantedNumbers.DelimitedText, COLORDANGER);
-  StatusWindow.WriteStatus('Ne doit pas contenir: ', COLORSTATUS);
-  StatusWindow.WriteStatus('    ' + slNonWantedNumbers.DelimitedText, COLORDANGER);
-  StatusWindow.WriteStatus('Complémentaire doit contenir: ', COLORSTATUS);
-  StatusWindow.WriteStatus('    ' + slComplemantaireWanted.DelimitedText, COLORDANGER);
-  StatusWindow.WriteStatus('Complémentaire ne doit pas contenir: ', COLORSTATUS);
-  StatusWindow.WriteStatus('    ' + slComplementaireNonWanted.DelimitedText, COLORDANGER);
-  StatusWindow.JumpOneLine;
+  WriteStatus('Doit contenir: ', COLORSTATUS);
+  WriteStatus('    ' + slWantedNumbers.DelimitedText, COLORDANGER);
+  WriteStatus('Ne doit pas contenir: ', COLORSTATUS);
+  WriteStatus('    ' + slNonWantedNumbers.DelimitedText, COLORDANGER);
+  WriteStatus('Complémentaire doit contenir: ', COLORSTATUS);
+  WriteStatus('    ' + slComplemantaireWanted.DelimitedText, COLORDANGER);
+  WriteStatus('Complémentaire ne doit pas contenir: ', COLORSTATUS);
+  WriteStatus('    ' + slComplementaireNonWanted.DelimitedText, COLORDANGER);
+  WriteStatus('', COLORSTATUS);
 
   if MakeSureNothingInCommon(slWantedNumbers, slNonWantedNumbers) then
   begin
@@ -615,385 +561,44 @@ begin
       end
       else
       begin
-        StatusWindow.WriteStatus('ERREUR: On ne peut pas exigé d''avoir le même numéro dans la combinaison principale et dans le complémentaire...', COLORERROR);
+        WriteStatus('ERREUR: On ne peut pas exigé d''avoir le même numéro dans la combinaison principale et dans le complémentaire...', COLORERROR);
       end;
     end
     else
     begin
-      StatusWindow.WriteStatus('ERREUR: Votre liste de numéros qui doit être contenu dans le complémentaire ne peut pas contenir un numéro qui ne doit pas être contenu en même temps...', COLORERROR);
+      WriteStatus('ERREUR: Votre liste de numéros qui doit être contenu dans le complémentaire ne peut pas contenir un numéro qui ne doit pas être contenu en même temps...', COLORERROR);
     end;
   end
   else
   begin
-    StatusWindow.WriteStatus('ERREUR: Votre liste de numéros qui doit être contenu ne peut pas contenir un numéro qui ne doit pas être contenu en même temps...', COLORERROR);
+    WriteStatus('ERREUR: Votre liste de numéros qui doit être contenu ne peut pas contenir un numéro qui ne doit pas être contenu en même temps...', COLORERROR);
   end;
 end;
 
-function GetDashLine(Lg: integer): string;
-begin
-  result := '-';
-  while length(result) < Lg do
-    result := result + '-';
-end;
-
-function TfrmMainForm.ShowResult: boolean;
+{ TfrmMainForm.MakeSureNothingInCommon }
+function TfrmMainForm.MakeSureNothingInCommon(slNumbers1, slNumbers2: TStringList): boolean;
 var
-  iLocalTotal, iWinning: integer;
-  sStatLine: string;
+  iIndex: integer;
 begin
-  result := False;
-  iLocalTotal := 0;
-
-  for iWinning := 0 to 6 do
+  result := True;
+  iIndex := 0;
+  while (iIndex < slNumbers1.Count) and (result) do
   begin
-    sStatLine := '      Nombre de ' + IntToStr(iWinning) + '/6 : ' + IntToStr(WinningResult[0][0][iWinning]);
-    memoSommaire.Lines.Add(sStatLine);
-    pMemo[0][0][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
-    pMemo[0][0][iWinning]^.Lines.Insert(0, sStatLine);
-    StatusWindow.WriteStatus('           ' + sStatLine, COLORSTATUS);
-    iLocalTotal := iLocalTotal + WinningResult[0][0][iWinning];
-
-    sStatLine := '      Nombre de ' + IntToStr(iWinning) + '/6+: ' + IntToStr(WinningResult[0][1][iWinning]);
-    memoSommaire.Lines.Add(sStatLine);
-    pMemo[0][1][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
-    pMemo[0][1][iWinning]^.Lines.Insert(0, sStatLine);
-    StatusWindow.WriteStatus('           ' + sStatLine, COLORSTATUS);
-    iLocalTotal := iLocalTotal + WinningResult[0][1][iWinning];
-
-    sStatLine := 'Nombre de Rejet ' + IntToStr(iWinning) + '/6 : ' + IntToStr(WinningResult[1][0][iWinning]);
-    memoSommaire.Lines.Add(sStatLine);
-    pMemo[1][0][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
-    pMemo[1][0][iWinning]^.Lines.Insert(0, sStatLine);
-    StatusWindow.WriteStatus('           ' + sStatLine, COLORSTATUS);
-    iLocalTotal := iLocalTotal + WinningResult[1][0][iWinning];
-
-    sStatLine := 'Nombre de Rejet ' + IntToStr(iWinning) + '/6+: ' + IntToStr(WinningResult[1][1][iWinning]);
-    memoSommaire.Lines.Add(sStatLine);
-    pMemo[1][1][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
-    pMemo[1][1][iWinning]^.Lines.Insert(0, sStatLine);
-    StatusWindow.WriteStatus('           ' + sStatLine, COLORSTATUS);
-    iLocalTotal := iLocalTotal + WinningResult[1][1][iWinning];
-  end;
-
-  memoSommaire.Lines.Add('');
-  sStatLine := '                    Total: ' + IntToStr(iLocalTotal);
-  memoSommaire.Lines.Add(sStatLine);
-  StatusWindow.WriteStatus(sStatLine, COLORSUCCESS);
-  sStatLine := 'Tirage dans notre fichier: ' + IntToStr(iNombreDeTirage);
-  memoSommaire.Lines.Add(sStatLine);
-  StatusWindow.WriteStatus(sStatLine, COLORSUCCESS);
-
-  if iLocalTotal = iNombreDeTirage then
-  begin
-    StatusWindow.WriteStatus('Succès! Ces résulats correspondant à notre nombre de tirages dans le fichier!', COLORSUCCESS);
-    result := True;
-  end
-  else
-  begin
-    StatusWindow.WriteStatus('ERREUR: Le nombre de tirages dans notre fichiers ne balance avec ces résultats...', COLORERROR);
-  end;
-
-end;
-
-function TfrmMainForm.GetALineForThisCombinaison(paramTirage: integer; bGotComplementaire: boolean): string;
-var
-  iBoule: integer;
-  sBoule: string;
-begin
-  result := Tirages[paramTirage].Date + ' : ';
-  for iBoule := 0 to 5 do
-  begin
-    sBoule := Format('%.2d', [Tirages[paramTirage].Numbers[iBoule]]);
-    if lbDominicBoule.IndexOf(sBoule) <> -1 then
-      sBoule := '<' + sBoule + '>'
-    else
-      sBoule := ' ' + sBoule + ' ';
-    result := result + sBoule;
-  end;
-
-  sBoule := Format('%.2d', [Tirages[paramTirage].Numbers[6]]);
-  if bGotComplementaire then
-    sBoule := '<' + sBoule + '>'
-  else
-    sBoule := ' ' + sBoule + ' ';
-  result := result + '  [' + sBoule + ']';
-end;
-
-procedure LoadWindowRegistryConfig(RegistryConfigFile: TRegistryIniFile; WorkingForm: TForm; SectionName: string);
-begin
-  WorkingForm.WindowState := TWindowState(RegistryConfigFile.ReadInteger(SectionName, 'WindowState', ord(wsNormal)));
-
-  if WorkingForm.WindowState <> wsMaximized then
-  begin
-    if WorkingForm.WindowState = wsMinimized then
-      WorkingForm.WindowState := wsNormal;
-    WorkingForm.Width := RegistryConfigFile.ReadInteger(SectionName, 'width', WorkingForm.Constraints.MinWidth);
-    WorkingForm.Height := RegistryConfigFile.ReadInteger(SectionName, 'height', WorkingForm.Constraints.MinHeight);
-  end;
-
-  WorkingForm.Left := RegistryConfigFile.ReadInteger(SectionName, 'left', (Screen.Width - WorkingForm.Width) div 2);
-  WorkingForm.Top := RegistryConfigFile.ReadInteger(SectionName, 'top', (Screen.Height - WorkingForm.Height) div 2);
-end;
-
-procedure SaveWindowRegistryConfig(RegistryConfigFile: TRegistryIniFile; WorkingForm: TForm; SectionName: string);
-begin
-  RegistryConfigFile.WriteInteger(SectionName, 'WindowState', ord(WorkingForm.WindowState));
-  if WorkingForm.WindowState <> wsMaximized then
-  begin
-    RegistryConfigFile.WriteInteger(SectionName, 'width', WorkingForm.Width);
-    RegistryConfigFile.WriteInteger(SectionName, 'height', WorkingForm.Height);
-  end;
-
-  RegistryConfigFile.WriteInteger(SectionName, 'left', WorkingForm.Left);
-  RegistryConfigFile.WriteInteger(SectionName, 'top', WorkingForm.Top);
-end;
-
-procedure TfrmMainForm.LoadConfiguration;
-var
-  Rosco32IniRegistry: TRegistryIniFile;
-const
-  BASELOCATIONOFREGISTRYINI = 'SOFTWARE\DENISBISSON\ROSCO32';
-
-begin
-  Rosco32IniRegistry := TRegistryIniFile.Create(BASELOCATIONOFREGISTRYINI);
-  with Rosco32IniRegistry do
-  begin
-    LoadWindowRegistryConfig(Rosco32IniRegistry, Self, MAINCONFIGSECTION);
-    pgMainPageControl.ActivePageIndex := ReadInteger(MAINCONFIGSECTION, 'pgMainPageControl', 1);
-    ResultPageControl.ActivePageIndex := ReadInteger(MAINCONFIGSECTION, 'ResultPageControl', 0);
-    edContain.text := ReadString(MAINCONFIGSECTION, 'edContain2', '1-10');
-    edMustNotContain.text := ReadString(MAINCONFIGSECTION, 'edMustNotContain2', '40-49');
-    edWantedComplementaire.text := ReadString(MAINCONFIGSECTION, 'edWantedComplementaire2', '');
-    edNotWantedComplementaire.text := ReadString(MAINCONFIGSECTION, 'edNotWantedComplementaire2', '1-30,40-49');
-    //..LoadConfiguration
-  end;
-  Rosco32IniRegistry.Free;
-end;
-
-procedure TfrmMainForm.SaveConfiguration;
-var
-  Rosco32IniRegistry: TRegistryIniFile;
-begin
-  Rosco32IniRegistry := TRegistryIniFile.Create(BASELOCATIONOFREGISTRYINI);
-  with Rosco32IniRegistry do
-  begin
-    SaveWindowRegistryConfig(Rosco32IniRegistry, Self, MAINCONFIGSECTION);
-    WriteInteger(MAINCONFIGSECTION, 'pgMainPageControl', pgMainPageControl.ActivePageIndex);
-    WriteInteger(MAINCONFIGSECTION, 'ResultPageControl', ResultPageControl.ActivePageIndex);
-    WriteString(MAINCONFIGSECTION, 'edContain2', edContain.text);
-    WriteString(MAINCONFIGSECTION, 'edMustNotContain2', edMustNotContain.text);
-    WriteString(MAINCONFIGSECTION, 'edWantedComplementaire2', edWantedComplementaire.text);
-    WriteString(MAINCONFIGSECTION, 'edNotWantedComplementaire2', edNotWantedComplementaire.text);
-    //..SaveC
-  end;
-  Rosco32IniRegistry.Free;
-end;
-
-{ TfrmMainForm.SanitizeExpression }
-
-function TfrmMainForm.SanitizeExpression(edExpression: TLabeledEdit; slNumbers: TStringList): boolean;
-const
-  sLEGALCHARACTERS: string = '0123456789-,';
-  sDIGITS: string = '0123456789';
-var
-  iSeeker, iErrorPosition, iPreviousNumber: integer;
-  sMaybeExpression, sCurrentNumber, sArrow: string;
-  bKeepGoing, bWeCurrentlyHaveDash: boolean;
-
-  function LocalAddNumber(iLow, iHigh: integer): boolean;
-  var
-    iIndex: integer;
-  begin
-    result := False;
-
-    if iLow = 0 then
-      iLow := iHigh;
-
-    iIndex := iLow;
-    while (iIndex <= iHigh) and (bKeepGoing) do
+    if slNumbers2.IndexOf(slNumbers1.Strings[iIndex]) <> -1 then
     begin
-      if slNumbers.IndexOf(IntToStr(iIndex)) = -1 then
-      begin
-        slNumbers.Add(IntToStr(iIndex));
-      end
-      else
-      begin
-        StatusWindow.WriteStatus('ERREUR: Vous tentez d''incorporer deux fois le numéro ' + IntToStr(iIndex), COLORERROR);
-        bKeepGoing := False;
-        iErrorPosition := pred(iSeeker);
-      end;
-
-      inc(iIndex);
+      WriteStatus(Format('ERREUR: Le numéro suivant est contenu dans deux liste: %s', [slNumbers1.Strings[iIndex]]), COLORERROR);
+      result := False;
     end;
-
-    if (pred(iIndex) = iHigh) and (bKeepGoing) then
-      result := True;
-  end;
-
-begin
-  result := False;
-  sMaybeExpression := edExpression.Text;
-  sMaybeExpression := StringReplace(sMaybeExpression, ' ', '', [rfReplaceAll]);
-  edExpression.Text := sMaybeExpression;
-  slNumbers.Clear;
-
-  bKeepGoing := True;
-  sCurrentNumber := '';
-  iPreviousNumber := 0;
-  bWeCurrentlyHaveDash := False;
-  iErrorPosition := 1;
-  iSeeker := 1;
-
-  if length(sMaybeExpression) > 0 then
-  begin
-    while (iSeeker <= length(sMaybeExpression)) and (bKeepGoing) do
-    begin
-      if pos(sMaybeExpression[iSeeker], sDIGITS) <> 0 then
-      begin
-        sCurrentNumber := sCurrentNumber + sMaybeExpression[iSeeker];
-        inc(iSeeker);
-      end
-      else
-      begin
-        if sMaybeExpression[iSeeker] = ',' then
-        begin
-          if sCurrentNumber <> '' then
-          begin
-            if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
-            begin
-              if bWeCurrentlyHaveDash and (iPreviousNumber >= StrToInt(sCurrentNumber)) then
-              begin
-                StatusWindow.WriteStatus('ERREUR: Le second numéro d''un intervalle doit être plug grand que le premier...', COLORERROR);
-                iErrorPosition := pred(iSeeker);
-                bKeepGoing := False;
-              end
-              else
-              begin
-                if LocalAddNumber(iPreviousNumber, StrToInt(sCurrentNumber)) then
-                begin
-                  sCurrentNumber := '';
-                  iPreviousNumber := 0;
-                  bWeCurrentlyHaveDash := False;
-                  inc(iSeeker);
-                end;
-              end;
-            end
-            else
-            begin
-              StatusWindow.WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
-              iErrorPosition := pred(iSeeker);
-              bKeepGoing := False;
-            end;
-          end
-          else
-          begin
-            iErrorPosition := iSeeker;
-            bKeepGoing := False;
-          end;
-        end
-        else
-        begin
-          if sMaybeExpression[iSeeker] = '-' then
-          begin
-            if (not bWeCurrentlyHaveDash) and (sCurrentNumber <> '') then
-            begin
-              if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
-              begin
-                iPreviousNumber := StrToInt(sCurrentNumber);
-                sCurrentNumber := '';
-                bWeCurrentlyHaveDash := True;
-                inc(iSeeker);
-              end
-              else
-              begin
-                StatusWindow.WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
-                iErrorPosition := pred(iSeeker);
-                bKeepGoing := False;
-              end;
-            end
-            else
-            begin
-              iErrorPosition := iSeeker;
-              bKeepGoing := False;
-            end
-          end
-          else
-          begin
-            iErrorPosition := iSeeker;
-            bKeepGoing := False;
-          end;
-        end;
-      end;
-    end;
-
-    if bKeepGoing then
-    begin
-      if sCurrentNumber <> '' then
-      begin
-        if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
-        begin
-          if bWeCurrentlyHaveDash and (iPreviousNumber >= StrToInt(sCurrentNumber)) then
-          begin
-            StatusWindow.WriteStatus('ERREUR: Le second numéro d''un intervalle doit être plug grand que le premier...', COLORERROR);
-            iErrorPosition := pred(iSeeker);
-            bKeepGoing := False;
-          end
-          else
-          begin
-            if LocalAddNumber(iPreviousNumber, StrToInt(sCurrentNumber)) then
-            begin
-            end;
-          end;
-        end
-        else
-        begin
-          StatusWindow.WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
-          iErrorPosition := pred(iSeeker);
-          bKeepGoing := False;
-        end;
-      end
-      else
-      begin
-        StatusWindow.WriteStatus('ERREUR: L''expression semble mal se terminée...', COLORERROR);
-        iErrorPosition := pred(iSeeker);
-        bKeepGoing := False;
-      end;
-    end;
-  end;
-
-  if ((pred(iSeeker) = length(sMaybeExpression)) and (bKeepGoing)) or (length(sMaybeExpression) = 0) then
-  begin
-    result := True;
-  end
-  else
-  begin
-    sArrow := '';
-    while length(sArrow) < pred(iErrorPosition) do
-      sArrow := sArrow + ' ';
-    StatusWindow.WriteStatus(Format('ERREUR dans cette expression: "%s"', [StringReplace(edExpression.EditLabel.Caption, '&', '', [rfReplaceAll])]), COLORERROR);
-    StatusWindow.WriteStatus(sArrow + '|', COLORERROR);
-    StatusWindow.WriteStatus(edExpression.Text, COLORERROR);
-    StatusWindow.WriteStatus(sArrow + '|', COLORERROR);
+    inc(iIndex);
   end;
 end;
 
-{ TfrmMainForm.SanitizeAllExpressions }
-
-function TfrmMainForm.SanitizeAllExpressions: boolean;
-begin
-  result := False;
-  if SanitizeExpression(edContain, slWantedNumbers) then
-    if SanitizeExpression(edMustNotContain, slNonWantedNumbers) then
-      if SanitizeExpression(edWantedComplementaire, slComplemantaireWanted) then
-        if SanitizeExpression(edNotWantedComplementaire, slComplementaireNonWanted) then
-          result := True;
-end;
-
+{ TfrmMainForm.DoSearchingJob }
 function TfrmMainForm.DoSearchingJob: boolean;
 var
   iBoule, iTirage, NbDeBoulePareil, NbUnwantedBall, NbBouleComplementaire: integer;
 begin
-  StatusWindow.WriteStatus('On lance notre recherche...', COLORDANGER);
+  WriteStatus('On lance notre recherche...', COLORDANGER);
 
   MasterGage.MinValue := 0;
   MasterGage.Progress := 0;
@@ -1052,8 +657,423 @@ begin
       Application.ProcessMessages;
   end;
 
-  StatusWindow.WriteStatus('La recherche est complétée!', COLORSUCCESS);
+  WriteStatus('La recherche est complétée!', COLORSUCCESS);
   result := True;
+end;
+
+{ GetDashLine }
+function GetDashLine(Lg: integer): string;
+begin
+  result := '-';
+  while length(result) < Lg do
+    result := result + '-';
+end;
+
+{ TfrmMainForm.ShowResult }
+function TfrmMainForm.ShowResult: boolean;
+var
+  iLocalTotal, iWinning: integer;
+  sStatLine: string;
+begin
+  result := False;
+  iLocalTotal := 0;
+
+  for iWinning := 0 to 6 do
+  begin
+    sStatLine := '      Nombre de ' + IntToStr(iWinning) + '/6 : ' + IntToStr(WinningResult[0][0][iWinning]);
+    memoSommaire.Lines.Add(sStatLine);
+    pMemo[0][0][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
+    pMemo[0][0][iWinning]^.Lines.Insert(0, sStatLine);
+    WriteStatus('           ' + sStatLine, COLORSTATUS);
+    iLocalTotal := iLocalTotal + WinningResult[0][0][iWinning];
+
+    sStatLine := '      Nombre de ' + IntToStr(iWinning) + '/6+: ' + IntToStr(WinningResult[0][1][iWinning]);
+    memoSommaire.Lines.Add(sStatLine);
+    pMemo[0][1][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
+    pMemo[0][1][iWinning]^.Lines.Insert(0, sStatLine);
+    WriteStatus('           ' + sStatLine, COLORSTATUS);
+    iLocalTotal := iLocalTotal + WinningResult[0][1][iWinning];
+
+    sStatLine := 'Nombre de Rejet ' + IntToStr(iWinning) + '/6 : ' + IntToStr(WinningResult[1][0][iWinning]);
+    memoSommaire.Lines.Add(sStatLine);
+    pMemo[1][0][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
+    pMemo[1][0][iWinning]^.Lines.Insert(0, sStatLine);
+    WriteStatus('           ' + sStatLine, COLORSTATUS);
+    iLocalTotal := iLocalTotal + WinningResult[1][0][iWinning];
+
+    sStatLine := 'Nombre de Rejet ' + IntToStr(iWinning) + '/6+: ' + IntToStr(WinningResult[1][1][iWinning]);
+    memoSommaire.Lines.Add(sStatLine);
+    pMemo[1][1][iWinning]^.Lines.Insert(0, GetDashLine(length(sStatLine)));
+    pMemo[1][1][iWinning]^.Lines.Insert(0, sStatLine);
+    WriteStatus('           ' + sStatLine, COLORSTATUS);
+    iLocalTotal := iLocalTotal + WinningResult[1][1][iWinning];
+  end;
+
+  memoSommaire.Lines.Add('');
+  sStatLine := '                    Total: ' + IntToStr(iLocalTotal);
+  memoSommaire.Lines.Add(sStatLine);
+  WriteStatus(sStatLine, COLORSUCCESS);
+  sStatLine := 'Tirage dans notre fichier: ' + IntToStr(iNombreDeTirage);
+  memoSommaire.Lines.Add(sStatLine);
+  WriteStatus(sStatLine, COLORSUCCESS);
+
+  if iLocalTotal = iNombreDeTirage then
+  begin
+    WriteStatus('Succès! Ces résulats correspondant à notre nombre de tirages dans le fichier!', COLORSUCCESS);
+    result := True;
+  end
+  else
+  begin
+    WriteStatus('ERREUR: Le nombre de tirages dans notre fichiers ne balance avec ces résultats...', COLORERROR);
+  end;
+end;
+
+{ TfrmMainForm.GetALineForThisCombinaison }
+function TfrmMainForm.GetALineForThisCombinaison(paramTirage: integer; bGotComplementaire: boolean): string;
+var
+  iBoule: integer;
+  sBoule: string;
+begin
+  result := Tirages[paramTirage].Date + ' : ';
+  for iBoule := 0 to 5 do
+  begin
+    sBoule := Format('%.2d', [Tirages[paramTirage].Numbers[iBoule]]);
+    if lbDominicBoule.IndexOf(sBoule) <> -1 then
+      sBoule := '<' + sBoule + '>'
+    else
+      sBoule := ' ' + sBoule + ' ';
+    result := result + sBoule;
+  end;
+
+  sBoule := Format('%.2d', [Tirages[paramTirage].Numbers[6]]);
+  if bGotComplementaire then
+    sBoule := '<' + sBoule + '>'
+  else
+    sBoule := ' ' + sBoule + ' ';
+  result := result + '  [' + sBoule + ']';
+end;
+
+{ TfrmMainForm.SanitizeExpression }
+function TfrmMainForm.SanitizeExpression(edExpression: TLabeledEdit; slNumbers: TStringList): boolean;
+const
+  sLEGALCHARACTERS: string = '0123456789-,';
+  sDIGITS: string = '0123456789';
+var
+  iSeeker, iErrorPosition, iPreviousNumber: integer;
+  sMaybeExpression, sCurrentNumber, sArrow: string;
+  bKeepGoing, bWeCurrentlyHaveDash: boolean;
+
+  function LocalAddNumber(iLow, iHigh: integer): boolean;
+  var
+    iIndex: integer;
+  begin
+    result := False;
+
+    if iLow = 0 then
+      iLow := iHigh;
+
+    iIndex := iLow;
+    while (iIndex <= iHigh) and (bKeepGoing) do
+    begin
+      if slNumbers.IndexOf(IntToStr(iIndex)) = -1 then
+      begin
+        slNumbers.Add(IntToStr(iIndex));
+      end
+      else
+      begin
+        WriteStatus('ERREUR: Vous tentez d''incorporer deux fois le numéro ' + IntToStr(iIndex), COLORERROR);
+        bKeepGoing := False;
+        iErrorPosition := pred(iSeeker);
+      end;
+
+      inc(iIndex);
+    end;
+
+    if (pred(iIndex) = iHigh) and (bKeepGoing) then
+      result := True;
+  end;
+
+begin
+  result := False;
+  sMaybeExpression := edExpression.Text;
+  sMaybeExpression := StringReplace(sMaybeExpression, ' ', '', [rfReplaceAll]);
+  edExpression.Text := sMaybeExpression;
+  slNumbers.Clear;
+
+  bKeepGoing := True;
+  sCurrentNumber := '';
+  iPreviousNumber := 0;
+  bWeCurrentlyHaveDash := False;
+  iErrorPosition := 1;
+  iSeeker := 1;
+
+  if length(sMaybeExpression) > 0 then
+  begin
+    while (iSeeker <= length(sMaybeExpression)) and (bKeepGoing) do
+    begin
+      if pos(sMaybeExpression[iSeeker], sDIGITS) <> 0 then
+      begin
+        sCurrentNumber := sCurrentNumber + sMaybeExpression[iSeeker];
+        inc(iSeeker);
+      end
+      else
+      begin
+        if sMaybeExpression[iSeeker] = ',' then
+        begin
+          if sCurrentNumber <> '' then
+          begin
+            if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
+            begin
+              if bWeCurrentlyHaveDash and (iPreviousNumber >= StrToInt(sCurrentNumber)) then
+              begin
+                WriteStatus('ERREUR: Le second numéro d''un intervalle doit être plug grand que le premier...', COLORERROR);
+                iErrorPosition := pred(iSeeker);
+                bKeepGoing := False;
+              end
+              else
+              begin
+                if LocalAddNumber(iPreviousNumber, StrToInt(sCurrentNumber)) then
+                begin
+                  sCurrentNumber := '';
+                  iPreviousNumber := 0;
+                  bWeCurrentlyHaveDash := False;
+                  inc(iSeeker);
+                end;
+              end;
+            end
+            else
+            begin
+              WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
+              iErrorPosition := pred(iSeeker);
+              bKeepGoing := False;
+            end;
+          end
+          else
+          begin
+            iErrorPosition := iSeeker;
+            bKeepGoing := False;
+          end;
+        end
+        else
+        begin
+          if sMaybeExpression[iSeeker] = '-' then
+          begin
+            if (not bWeCurrentlyHaveDash) and (sCurrentNumber <> '') then
+            begin
+              if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
+              begin
+                iPreviousNumber := StrToInt(sCurrentNumber);
+                sCurrentNumber := '';
+                bWeCurrentlyHaveDash := True;
+                inc(iSeeker);
+              end
+              else
+              begin
+                WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
+                iErrorPosition := pred(iSeeker);
+                bKeepGoing := False;
+              end;
+            end
+            else
+            begin
+              iErrorPosition := iSeeker;
+              bKeepGoing := False;
+            end
+          end
+          else
+          begin
+            iErrorPosition := iSeeker;
+            bKeepGoing := False;
+          end;
+        end;
+      end;
+    end;
+
+    if bKeepGoing then
+    begin
+      if sCurrentNumber <> '' then
+      begin
+        if (StrToInt(sCurrentNumber) >= 0) and (StrToInt(sCurrentNumber) <= 49) then
+        begin
+          if bWeCurrentlyHaveDash and (iPreviousNumber >= StrToInt(sCurrentNumber)) then
+          begin
+            WriteStatus('ERREUR: Le second numéro d''un intervalle doit être plug grand que le premier...', COLORERROR);
+            iErrorPosition := pred(iSeeker);
+            bKeepGoing := False;
+          end
+          else
+          begin
+            if LocalAddNumber(iPreviousNumber, StrToInt(sCurrentNumber)) then
+            begin
+            end;
+          end;
+        end
+        else
+        begin
+          WriteStatus('ERREUR: Valeur de numéro hors norme. Doit être entre 1 et 49 compris.', COLORERROR);
+          iErrorPosition := pred(iSeeker);
+          bKeepGoing := False;
+        end;
+      end
+      else
+      begin
+        WriteStatus('ERREUR: L''expression semble mal se terminée...', COLORERROR);
+        iErrorPosition := pred(iSeeker);
+        bKeepGoing := False;
+      end;
+    end;
+  end;
+
+  if ((pred(iSeeker) = length(sMaybeExpression)) and (bKeepGoing)) or (length(sMaybeExpression) = 0) then
+  begin
+    result := True;
+  end
+  else
+  begin
+    sArrow := '';
+    while length(sArrow) < pred(iErrorPosition) do
+      sArrow := sArrow + ' ';
+    WriteStatus(Format('ERREUR dans cette expression: "%s"', [StringReplace(edExpression.EditLabel.Caption, '&', '', [rfReplaceAll])]), COLORERROR);
+    WriteStatus(sArrow + '|', COLORERROR);
+    WriteStatus(edExpression.Text, COLORERROR);
+    WriteStatus(sArrow + '|', COLORERROR);
+  end;
+end;
+
+{ TfrmMainForm.SanitizeAllExpressions }
+function TfrmMainForm.SanitizeAllExpressions: boolean;
+begin
+  result := False;
+  if SanitizeExpression(edContain, slWantedNumbers) then
+    if SanitizeExpression(edMustNotContain, slNonWantedNumbers) then
+      if SanitizeExpression(edWantedComplementaire, slComplemantaireWanted) then
+        if SanitizeExpression(edNotWantedComplementaire, slComplementaireNonWanted) then
+          result := True;
+end;
+
+{ TfrmMainForm.DisableToute }
+procedure TfrmMainForm.DisableToute;
+var
+  iAction, iRejet, iComplementaire, iResult: integer;
+begin
+  for iAction := 0 to pred(alMainActionList.ActionCount) do
+    alMainActionList.Actions[iAction].Enabled := FALSE;
+  bFinalActionResult := FALSE;
+  WantedFinalSheet := nil;
+  StatusWindow.Clear;
+  StatusWindow.Color := COLORWINDOW_WORKING;
+  pgMainPageControl.ActivePage := tsLog;
+  for iRejet := 0 to 1 do
+    for iComplementaire := 0 to 1 do
+      for iResult := 0 to pred(MAXSEARCHNUMBER) do
+        WinningResult[iRejet][iComplementaire][iResult] := 0;
+
+  for iRejet := 0 to 1 do
+    for iComplementaire := 0 to 1 do
+      for iResult := 0 to 6 do
+      begin
+        pMemo[iRejet][iComplementaire][iResult]^.Clear;
+        pMemo[iRejet][iComplementaire][iResult]^.ScrollBars := ssVertical;
+        pMemo[iRejet][iComplementaire][iResult]^.ReadOnly := True;
+      end;
+  memoSommaire.Clear;
+end;
+
+{ TfrmMainForm.EnableToute }
+procedure TfrmMainForm.EnableToute;
+var
+  iAction: integer;
+begin
+  for iAction := 0 to pred(alMainActionList.ActionCount) do
+    alMainActionList.Actions[iAction].Enabled := TRUE;
+
+  if bFinalActionResult then
+  begin
+    WriteStatus('L''opération a été un succès!', COLORSUCCESS);
+    StatusWindow.Color := COLORWINDOW_SUCCESS;
+    if WantedFinalSheet <> nil then
+      pgMainPageControl.ActivePage := WantedFinalSheet;
+  end
+  else
+  begin
+    WriteStatus('L''opération a échouée...', COLORERROR);
+    StatusWindow.Color := COLORWINDOW_ERROR;
+
+  end;
+end;
+
+{ LoadWindowRegistryConfig }
+procedure LoadWindowRegistryConfig(RegistryConfigFile: TRegistryIniFile; WorkingForm: TForm; SectionName: string);
+begin
+  WorkingForm.WindowState := TWindowState(RegistryConfigFile.ReadInteger(SectionName, 'WindowState', ord(wsNormal)));
+
+  if WorkingForm.WindowState <> wsMaximized then
+  begin
+    if WorkingForm.WindowState = wsMinimized then
+      WorkingForm.WindowState := wsNormal;
+    WorkingForm.Width := RegistryConfigFile.ReadInteger(SectionName, 'width', WorkingForm.Constraints.MinWidth);
+    WorkingForm.Height := RegistryConfigFile.ReadInteger(SectionName, 'height', WorkingForm.Constraints.MinHeight);
+  end;
+
+  WorkingForm.Left := RegistryConfigFile.ReadInteger(SectionName, 'left', (Screen.Width - WorkingForm.Width) div 2);
+  WorkingForm.Top := RegistryConfigFile.ReadInteger(SectionName, 'top', (Screen.Height - WorkingForm.Height) div 2);
+end;
+
+{ SaveWindowRegistryConfig }
+procedure SaveWindowRegistryConfig(RegistryConfigFile: TRegistryIniFile; WorkingForm: TForm; SectionName: string);
+begin
+  RegistryConfigFile.WriteInteger(SectionName, 'WindowState', ord(WorkingForm.WindowState));
+  if WorkingForm.WindowState <> wsMaximized then
+  begin
+    RegistryConfigFile.WriteInteger(SectionName, 'width', WorkingForm.Width);
+    RegistryConfigFile.WriteInteger(SectionName, 'height', WorkingForm.Height);
+  end;
+
+  RegistryConfigFile.WriteInteger(SectionName, 'left', WorkingForm.Left);
+  RegistryConfigFile.WriteInteger(SectionName, 'top', WorkingForm.Top);
+end;
+
+{ TfrmMainForm.LoadConfiguration }
+procedure TfrmMainForm.LoadConfiguration;
+var
+  Rosco32IniRegistry: TRegistryIniFile;
+const
+  BASELOCATIONOFREGISTRYINI = 'SOFTWARE\DENISBISSON\ROSCO32';
+
+begin
+  Rosco32IniRegistry := TRegistryIniFile.Create(BASELOCATIONOFREGISTRYINI);
+  with Rosco32IniRegistry do
+  begin
+    LoadWindowRegistryConfig(Rosco32IniRegistry, Self, MAINCONFIGSECTION);
+    pgMainPageControl.ActivePageIndex := ReadInteger(MAINCONFIGSECTION, 'pgMainPageControl', 1);
+    ResultPageControl.ActivePageIndex := ReadInteger(MAINCONFIGSECTION, 'ResultPageControl', 0);
+    edContain.text := ReadString(MAINCONFIGSECTION, 'edContain2', '1-10');
+    edMustNotContain.text := ReadString(MAINCONFIGSECTION, 'edMustNotContain2', '40-49');
+    edWantedComplementaire.text := ReadString(MAINCONFIGSECTION, 'edWantedComplementaire2', '');
+    edNotWantedComplementaire.text := ReadString(MAINCONFIGSECTION, 'edNotWantedComplementaire2', '1-30,40-49');
+    //..LoadConfiguration
+  end;
+  Rosco32IniRegistry.Free;
+end;
+
+{ TfrmMainForm.SaveConfiguration }
+procedure TfrmMainForm.SaveConfiguration;
+var
+  Rosco32IniRegistry: TRegistryIniFile;
+begin
+  Rosco32IniRegistry := TRegistryIniFile.Create(BASELOCATIONOFREGISTRYINI);
+  with Rosco32IniRegistry do
+  begin
+    SaveWindowRegistryConfig(Rosco32IniRegistry, Self, MAINCONFIGSECTION);
+    WriteInteger(MAINCONFIGSECTION, 'pgMainPageControl', pgMainPageControl.ActivePageIndex);
+    WriteInteger(MAINCONFIGSECTION, 'ResultPageControl', ResultPageControl.ActivePageIndex);
+    WriteString(MAINCONFIGSECTION, 'edContain2', edContain.text);
+    WriteString(MAINCONFIGSECTION, 'edMustNotContain2', edMustNotContain.text);
+    WriteString(MAINCONFIGSECTION, 'edWantedComplementaire2', edWantedComplementaire.text);
+    WriteString(MAINCONFIGSECTION, 'edNotWantedComplementaire2', edNotWantedComplementaire.text);
+    //..SaveC
+  end;
+  Rosco32IniRegistry.Free;
 end;
 
 end.

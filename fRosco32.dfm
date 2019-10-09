@@ -211,12 +211,12 @@ object frmMainForm: TfrmMainForm
     Top = 124
     Width = 684
     Height = 298
-    ActivePage = tsResults
+    ActivePage = tsLog
     Align = alClient
     TabOrder = 2
     object tsLog: TTabSheet
       Caption = '&Journal'
-      object MasterGage: TGauge64
+      object MasterGage: TGauge
         Left = 0
         Top = 253
         Width = 676
@@ -228,7 +228,7 @@ object frmMainForm: TfrmMainForm
         ExplicitTop = 192
         ExplicitWidth = 593
       end
-      object StatusWindow: TRichEditGlobal6
+      object StatusWindow: TRichEdit
         Left = 0
         Top = 0
         Width = 676
@@ -242,8 +242,6 @@ object frmMainForm: TfrmMainForm
         ParentFont = False
         TabOrder = 0
         Zoom = 100
-        TitleColor = clBlue
-        SubTitleColor = clMaroon
       end
     end
     object tsResults: TTabSheet
@@ -854,10 +852,6 @@ object frmMainForm: TfrmMainForm
     Images = ilMainImageList
     Left = 560
     Top = 344
-    object actLoadDatabase: TAction
-      Caption = 'V'#233'rifie la pr'#233'sence de la liste des num'#233'ros'
-      OnExecute = actLoadDatabaseExecute
-    end
     object actChercheCetteCombinaison: TAction
       Caption = 'Cherche cette combinaison'
       Hint = 'Cherche cette combinaison'
@@ -876,6 +870,7 @@ object frmMainForm: TfrmMainForm
       Caption = 'Sortie'
       Hint = 'Sortie'
       ImageIndex = 2
+      ShortCut = 32883
       OnExecute = actExitExecute
     end
     object actEdit: TAction
@@ -898,8 +893,14 @@ object frmMainForm: TfrmMainForm
     Top = 352
     object Action1: TMenuItem
       Caption = '&Actions'
+      object ditelefichierdesnumros2: TMenuItem
+        Action = actEdit
+      end
       object Validelefichierdesnumros1: TMenuItem
         Action = actValideLeFichierDesNumeros
+      end
+      object Miseclair2: TMenuItem
+        Action = actMiseEclair
       end
       object Cherchecettecombinaison1: TMenuItem
         Action = actChercheCetteCombinaison
@@ -918,7 +919,7 @@ object frmMainForm: TfrmMainForm
     Left = 472
     Top = 344
     Bitmap = {
-      494C010105000800880020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101050008008C0020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000800000004000000001002000000000000080
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
