@@ -1,4 +1,20 @@
-﻿unit fRosco32;
+﻿//********************************************************************************
+//* ROSCO32                                                                      *
+//* -----------------------------------------------------------------------------*
+//* Application to make some fun with past draw results of Loto-Québec 6/49      *
+//* lottery draw results.                                                        *
+//* May be executed prior build, commmit, backup, etc. to remove unused files.   *
+//* Written by Denis Bisson, Drummondville, Québec, 2021-09-16.                  *
+//* -----------------------------------------------------------------------------*
+//* Originally written by Denis Bisson, Drummondville, Québec, Canada            *
+//*   https://github.com/denis-bisson/                                           *
+//*   2021-09-16                                                                 *
+//* -----------------------------------------------------------------------------*
+//* You should not remove these comments.                                        *
+//********************************************************************************
+//*
+
+unit fRosco32;
 
 interface
 
