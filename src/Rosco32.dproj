@@ -128,11 +128,13 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <VerInfo_Keys>CompanyName=Bluberi;FileVersion=1.6.30.458;InternalName=SCORPIO;LegalCopyright=2017;LegalTrademarks=Bluberi;OriginalFilename=Scorpio;ProductVersion=9.22;Comments=Made with Delphi 10 Seattle;ProgramID=;FileDescription=Updater;ProductName=GLOBAL6 - SCORPIO</VerInfo_Keys>
-        <VerInfo_MinorVer>6</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Open Source;FileVersion=2.3.30.458;InternalName=ROSCO32 - Evaluate combinaisons from the  list of draw results of Loto-Québec&apos;s lottery &quot;6/49&quot;;LegalCopyright=Open Source;LegalTrademarks=Open Source;OriginalFilename=Rosco32.exe;ProductVersion=9.22;Comments=Made in Delphi;ProgramID=;FileDescription=ROSCO32 - Evaluate combinaisons from the  list of draw results of Loto-Québec&apos;s lottery &quot;6/49&quot;;ProductName=$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <VerInfo_Release>30</VerInfo_Release>
         <VerInfo_Build>458</VerInfo_Build>
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_MajorVer>2</VerInfo_MajorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
