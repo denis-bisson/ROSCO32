@@ -175,6 +175,7 @@ type
     bFirstIdle: boolean;
     lbDominicBoule: TStringList;
     slWantedNumbers, slNonWantedNumbers, slComplemantaireWanted, slComplementaireNonWanted: TStringList;
+    procedure MySetTitle;
     procedure WriteStatus(const sMessageToShow: string; const iColorToUse: dword);
     function LoadDatabaseInMemory: boolean;
     function IntegreCesNumeros(sLineNumber: string; var sErrorString: string): boolean;
@@ -216,7 +217,7 @@ const
   COLORWINDOW_SUCCESS = $E0FFE0;
   COLORWINDOW_ERROR = $E0E0FF;
 
-{ TfrmMainForm.FormCreate }
+  { TfrmMainForm.FormCreate }
 procedure TfrmMainForm.FormCreate(Sender: TObject);
 begin
   lbDominicBoule := TStringList.Create;
@@ -252,7 +253,6 @@ begin
   slComplementaireNonWanted.Delimiter := ',';
 
   bFirstIdle := True;
-  Caption := 'ROSCO32 v2.2';
   pMemo[0][0][0] := addr(memo06);
   pMemo[0][1][0] := addr(memo06p);
   pMemo[0][0][1] := addr(memo16);
@@ -282,6 +282,8 @@ begin
   pMemo[1][1][5] := addr(memoR56p);
   pMemo[1][0][6] := addr(memoR66);
   pMemo[1][1][6] := addr(memoR66p);
+
+  MySetTitle;
 end;
 
 { TfrmMainForm.FormClose }
@@ -361,7 +363,8 @@ var
   sNomFichierIn: string;
 begin
   sNomFichierIn := paramstr(0);
-  sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
+  sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + '649.txt';
+  //sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
   WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
   if FileExists(sNomFichierIn) then
   begin
@@ -439,7 +442,8 @@ begin
   slLocalList := TStringList.Create;
   try
     sNomFichierIn := paramstr(0);
-    sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
+    //  sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + 'Quebec49.txt';
+    sNomFichierIn := IncludeTrailingPathDelimiter(ExtractFilePath(sNomFichierIn)) + '649.txt';
     WriteStatus('On vérifie la présence du fichier ' + sNomFichierIn + ' ...', COLORDANGER);
     if FileExists(sNomFichierIn) then
     begin
@@ -1090,6 +1094,44 @@ begin
     //..SaveC
   end;
   Rosco32IniRegistry.Free;
+end;
+
+{ TfrmMainForm.MySetTitle }
+procedure TfrmMainForm.MySetTitle;
+var
+  dwInfoSize, // Size of VERSIONINFO structure
+  dwVerSize, // Size of Version Info Data
+  dwWnd: DWORD; // Handle for the size call.
+  FI: PVSFixedFileInfo; // Delphi structure; see WINDOWS.PAS
+  ptrVerBuf: Pointer; // pointer to a version buffer
+  V1, V2, V3, V4: string;
+begin
+  V1 := '';
+  V2 := '';
+  V3 := '';
+  V4 := '';
+
+  dwInfoSize := getFileVersionInfoSize(PChar(GetModuleName(HInstance)), dwWnd);
+
+  if (dwInfoSize <> 0) then
+  begin
+    getMem(ptrVerBuf, dwInfoSize);
+    try
+      if getFileVersionInfo(PChar(GetModuleName(HInstance)), dwWnd, dwInfoSize, ptrVerBuf) then
+      begin
+        if verQueryValue(ptrVerBuf, '\', Pointer(FI), dwVerSize) then
+        begin
+          V1 := Format('%d', [hiWord(FI.dwFileVersionMS)]);
+          V2 := Format('%d', [loWord(FI.dwFileVersionMS)]);
+          V3 := Format('%d', [hiWord(FI.dwFileVersionLS)]);
+          V4 := Format('%d', [loWord(FI.dwFileVersionLS)]);
+          Caption := Application.Title + ' - ' + V1 + '.' + V2;
+        end;
+      end;
+    finally
+      freeMem(ptrVerBuf);
+    end;
+  end;
 end;
 
 end.
